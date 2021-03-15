@@ -53,6 +53,7 @@ def get_catalog_data(html):
         schema_url = image_schema_refine(parts_info['image_schema_url'])
         area = ''.join([f'{title[0:11]}/{i};' for i in parts_info['area_of_use']])
 
+        print('hello github')
 
         data = {'Tilda UID': code,
                 'SKU': code,
