@@ -34,6 +34,8 @@ def get_catalog_data(html):
         code = block.find('div', {'class': 'code'}).text # получаем код товара
         parts_url = setting.url_domen + block.find('a').get('href') # получаем ссылку на товар
         name_parts = block.find('div', {'class': 'name'}).text # получаем название товара
+        if translate_list[name_parts]:
+            name_parts = translate_list[name_parts]
 
         data_added_parts = copy_check() # инициализируем список товаров которые были добавлены, чтобы избавится от копий
         """Делаем проверку на копию, если ок, то добавляем товар в CSV, если нет, то пропускаем"""
@@ -53,14 +55,12 @@ def get_catalog_data(html):
         schema_url = image_schema_refine(parts_info['image_schema_url'])
         area = ''.join([f'{title[0:11]}/{i};' for i in parts_info['area_of_use']])
 
-        print('hello github')
-
         data = {'Tilda UID': code,
                 'SKU': code,
                 'Category': area[0:-1],
                 'Title': name_parts,
                 'Description': description,
-                'Text': description + '<br>' + attribute + applicazioni + schema_url,
+                'Text': description + '<br><br>' + attribute + applicazioni + schema_url,
                 'Photo': image_url,
                 'Price': cost_parts(code),
                 'Quantity': 0,

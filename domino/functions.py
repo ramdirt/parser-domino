@@ -8,6 +8,17 @@ setting = Settings()
 data_cost = []
 cost_index = 0
 
+def translate_data():
+    reader = csv.reader(open(setting.file_translate_word, 'r'))
+    data = {}
+    for row in reader:
+        key, value = row
+        data[key] = value
+
+    return data
+
+translate_list = translate_data()
+
 def get_html(url):
     r = requests.get(url)
     if r.ok:
@@ -31,6 +42,21 @@ def write_csv(data):
                          ))
 
 def parts_attribute_refine(div, html):
+    soup = BeautifulSoup(html, 'lxml')
+    parts_attribute = soup.find('div', {'class': div}).find_all('li')
+    part_att = ''
+    for i in parts_attribute:
+        translate = i.text.lstrip().rstrip().split(':')
+        # print(translate)
+        name_param = translate_list[translate[0]]
+        value_param = translate_list[translate[1].lstrip()]
+        part_att += f'{name_param}: {value_param}<br>'
+    # log = part_att.split('<br>')
+    # for i in log:
+    #     print(i)
+    return part_att
+
+def parts_attribute_refine_no_translate(div, html):
     soup = BeautifulSoup(html, 'lxml')
     parts_attribute = soup.find('div', {'class': div}).find_all('li')
     part_att = ''
@@ -73,7 +99,6 @@ def title_csv():
             'External ID': 'External ID'
             }
     write_csv(data)
-
 
 def cost_parts(code):
     code_parts = str(code[4:])
@@ -120,9 +145,13 @@ def description_refine(div, html):
     try:
         soup = BeautifulSoup(html, 'lxml')
         description = soup.find('div', {'class': div}).text.lstrip().rstrip().capitalize()
+        if translate_list[description]:
+            # print(translate_list[description])
+            return translate_list[description]
         return description
     except:
         description = ''
+        # print('нет описания')
         return description
 
 def area_of_use_refine(div, html):
@@ -150,4 +179,9 @@ def image_schema_refine(url):
 def applicazioni_refine(div, html):
     soup = BeautifulSoup(html, 'lxml')
     area = soup.find('div', {'class': div}).text.lstrip().rstrip().replace(' ', '')
-    return area
+    try:
+        if translate_list[area]:
+            return translate_list[area]
+    except:
+        print(area)
+        return area
