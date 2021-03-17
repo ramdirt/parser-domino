@@ -1,6 +1,6 @@
 class Settings():
     def __init__(self):
-        self.url_catalog = 'https://www.domino-group.com/tommaselli/en/electric-switches-on-road.html'
+        self.url_catalog = 'https://www.domino-group.com/tommaselli/en/electric-switches-off-road.html'
         self.url_domen = 'https://www.domino-group.com'
         self.money = 89
         self.file_save = 'csv/' + self.url_catalog.split('/')[-1][0:-5] + '.csv'
