@@ -3,7 +3,7 @@ import csv
 code_and_price = []
 
 def write_csv(data):
-    with open('price_domino_relevant.csv', 'a') as f:
+    with open('price_domino_relevant.csv', 'a', newline='') as f:
         writer = csv.writer(f)
         writer.writerow((data['code'],
                          data['price'],

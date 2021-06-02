@@ -34,9 +34,11 @@ def get_catalog_data(html):
         code = block.find('div', {'class': 'code'}).text # получаем код товара
         parts_url = setting.url_domen + block.find('a').get('href') # получаем ссылку на товар
         name_parts = block.find('div', {'class': 'name'}).text # получаем название товара
-        if translate_list[name_parts.lstrip()]:
-            name_parts = translate_list[name_parts.lstrip()]
-
+        try:
+            if translate_list[name_parts.lstrip()]:
+                name_parts = translate_list[name_parts.lstrip()]
+        except:
+            print(f'не было замены названия товара {name_parts}')
         data_added_parts = copy_check() # инициализируем список товаров которые были добавлены, чтобы избавится от копий
         """Делаем проверку на копию, если ок, то добавляем товар в CSV, если нет, то пропускаем"""
         try:
@@ -53,7 +55,7 @@ def get_catalog_data(html):
         applicazioni = parts_info['applicazioni']
         image_url = parts_info['image_url']
         schema_url = image_schema_refine(parts_info['image_schema_url'])
-        area = ''.join([f'{title[0:11]}/{i};' for i in parts_info['area_of_use']])
+        area = ''.join([f'{title[0:5]}/{i};' for i in parts_info['area_of_use']])
 
         data = {'Tilda UID': code,
                 'SKU': code,

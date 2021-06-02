@@ -49,7 +49,11 @@ def parts_attribute_refine(div, html):
         translate = i.text.lstrip().rstrip().split(':')
         # print(translate)
         name_param = translate_list[translate[0]]
-        value_param = translate_list[translate[1].lstrip()]
+        try:
+            value_param = translate_list[translate[1].lstrip()]
+        except KeyError:
+            print(f'Не было сделано перевода: {translate[1].lstrip()}')
+            value_param = translate[1].lstrip()
         part_att += f'{name_param}: {value_param}<br>'
     # log = part_att.split('<br>')
     # for i in log:
@@ -183,5 +187,4 @@ def applicazioni_refine(div, html):
         if translate_list[area]:
             return translate_list[area]
     except:
-        print(area)
         return area
